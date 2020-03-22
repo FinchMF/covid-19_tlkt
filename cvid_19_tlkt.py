@@ -19,11 +19,19 @@ import numpy as np
 from datetime import date, timedelta, datetime
 pd.options.plotting.backend
 
-'''
-Explain what this class does
-'''
+
 
 class Covid19_data():
+
+    '''
+    Covid19_data is a class which produces an object to explore daily data about Covid-19:
+
+    pass through updated csv
+
+    the class properties automatically clean the data
+
+    the class methods graph the date in three types of graphs
+    '''
 
     def __init__(self, updated_csv):
         self.df = pd.read_csv(updated_csv)
@@ -35,12 +43,13 @@ class Covid19_data():
         self.hoverdata_recovered = self.df['Country/Region'] + " - "+ ['Recovered: ' + str(v) for v in self.df['Recovered'].tolist()]
 
 
-    '''
-    Produce a global map that shows where COVID-19 is occuring. 
-    Within each position, there is number of: Confirmed Infections // Deaths // Recovery
-    '''
-
     def analyze_covid_global(self):
+
+        '''
+        Produce a global map that shows where COVID-19's geo location 
+
+        Within each position, there is number of: Confirmed Infections // Deaths // Recovery
+        '''
         
         fig = make_subplots()
         fig1 = go.Figure(data=go.Scattergeo(
@@ -110,79 +119,41 @@ class Covid19_data():
         fig.show()
 
 
-    '''
-    Produce a pie chart that shows distribution of given parameter
-    '''
-
-
     def analyze_covid_distribution(self, category):
 
-        if category == 'Confirmed':
-            fig = px.pie(self.df, 
-                        values='Confirmed', 
-                        names='Country/Region',
-                        title='Confirmed Infected rates across countries',
-                        hover_data=['Province/State'], 
-                        labels={'Province/State':'Province/State'})
-            fig.update_traces(textposition='inside')
-            fig.show()
-        
-        if category == 'Deaths':
-            fig = px.pie(self.df, 
-                values='Deaths', 
-                names='Country/Region',
-                title='Confirmed Infected rates across countries',
-                hover_data=['Province/State'], 
-                labels={'Province/State':'Province/State'})
-            fig.update_traces(textposition='inside')
-            fig.show()
-        
-        if category == 'Recovered':
-            fig = px.pie(self.df, 
-                values='Recovered', 
-                names='Country/Region',
-                title='Confirmed Infected rates across countries',
-                hover_data=['Province/State'], 
-                labels={'Province/State':'Province/State'})
-            fig.update_traces(textposition='inside')
-            fig.show()
+        '''
+        Produce a pie chart focused on distribution of given parameter
 
+        parameters are: Confirmed Infections // Deaths // Recovered
+        '''
 
-    '''
-    Explain treemap
-    '''
+        fig = px.pie(self.df, 
+                    values= category, 
+                    names='Country/Region',
+                    title= category + ' Rates Across Countries',
+                    hover_data=['Province/State'], 
+                    labels={'Province/State':'Province/State'})
+        fig.update_traces(textposition='inside')
+        fig.show()
+        
 
     def analyze_covid_treemap(self, category):
+        
+        '''
+        Produce a treemap focused on distribution of given parameter
 
-        if category == 'Confirmed':
-            self.df["world"] = "world" # root node
-            fig = px.treemap(self.df, 
-                            path=['world' , 'Country/Region', 'Province/State'], 
-                            color ='Confirmed' ,
-                            color_continuous_scale=px.colors.sequential.Magenta,
-                            title = 'Confirmed Infection rates', 
-                            values='Confirmed')
-            fig.show()
+        parameters are: Confirmed Infections // Deaths // Recovered
+        '''
 
-        if category == 'Deaths':
-            self.df["world"] = "world" # root node
-            fig = px.treemap(self.df, 
-                            path=['world' , 'Country/Region', 'Province/State'], 
-                            color ='Deaths' ,
-                            color_continuous_scale=px.colors.sequential.Magenta,
-                            title = 'Death rates', 
-                            values='Deaths')
-            fig.show()
+        self.df["world"] = "world" # root node
+        fig = px.treemap(self.df, 
+                                path=['world' , 'Country/Region', 'Province/State'], 
+                                color = category,
+                                color_continuous_scale=px.colors.sequential.Magenta,
+                                title = category, 
+                                values= category) 
+        fig.show()
 
-        if category == 'Recovered':
-            self.df["world"] = "world" # root node
-            fig = px.treemap(self.df, 
-                            path=['world' , 'Country/Region', 'Province/State'], 
-                            color ='Recovered' ,
-                            color_continuous_scale=px.colors.sequential.Magenta,
-                            title = 'Recovery rates', 
-                            values='Recovered')
-            fig.show()
 
     '''
     Analyze country or state
@@ -199,7 +170,14 @@ class Covid19_data():
 
 
 '''
-explain need for timeline variable
+timeline variable is a list of dates used to generate labels and is
+functional cleaning the dataframes to be plotted on the timeseries charts
+
+update_timeline function extends the list of the timeline to include days beyond the 20th 
+
+update_timeline function does this by using the data_set date and the timeline list
+to figure the amount of days between the last day in the timeline and the day in the dataset
+and extends the timeline list to number of dates needed
 '''
 
 
@@ -236,12 +214,9 @@ def update_timeline(timeline, dataset_date):
     timeline.extend(string_list)
     del timeline[-1]
     return timeline
-
-
-'''
-Explain what this class does
-'''        
-
+       
+# these methods are abstractions to be called within the Covid_Timeline_data class.
+# they generate necessary dateframes and values as needed for the timeline charts and printout
 
 def generate_dataframe(self, data):
     # generate confirmed dataframe
@@ -261,6 +236,11 @@ def generate_value(self, data):
 
 
 class Covid_Timeline_data():
+
+    '''
+    Covid_Timeline_data is a class that generates a timeseries object to explore the 
+    over all trends of Covid's spread between countries and over time
+    '''
 
     def __init__(self, updated_confirmed_timeline, updated_death_timeline, updated_recovered_timeline, timeline):
         self.confirmed_data = pd.read_csv(updated_confirmed_timeline)
@@ -348,9 +328,7 @@ class Covid_Timeline_data():
         print('==================================================================')
 
 
-'''
-Explain what this class does
-'''
+# a class to generate predict models to assist in forecasting covid
 
 class Covid19_Predictor():
 
