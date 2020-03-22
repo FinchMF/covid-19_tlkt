@@ -23,6 +23,12 @@ def generate_dataframe(self, data):
     df = pd.DataFrame({'Timeline':time,'Covid-19 impact':value})
     return df
 
+def generate_value(self, data):
+    value = []
+    for i in self.timeline:
+        value.append(data[i].sum())
+    return value[-1]
+
 
 class Covid_Timeline_data():
 
@@ -99,3 +105,7 @@ class Covid_Timeline_data():
 
                  
         fig.show()
+        print('================ Totals Report =====================================')
+        print('== Information to {} on novel COVID-19 =========\n'.format(self.confirmed_data[self.confirmed_data.columns[-1]].name))
+        print('Tota confirmed: {}\nTotal Deaths: {}\nTotal Recovered: {}\n'.format(generate_value(self, self.confirmed_data), generate_value(self,self.death_data), generate_value(self,self.recovered_data)))
+        print('==================================================================')
