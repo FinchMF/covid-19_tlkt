@@ -284,6 +284,7 @@ class Covid_Timeline_data():
                          x="Timeline", 
                          y="Covid-19 impact", 
                          color = 'Country',
+                         size='Covid-19 impact',
                          title = 'Spread of Covid-19 Infections Across Countries',
                          width=1000)
         fig.show()
@@ -306,17 +307,23 @@ class Covid_Timeline_data():
         fig.add_trace(
             go.Scatter(x=confirmed_df["Timeline"], 
                        y=confirmed_df["Covid-19 impact"], 
-                       name = 'Infected'))
+                       name = 'Infected',
+                       line=dict(
+                                  color='purple')))
 
         fig.add_trace(
             go.Scatter(x=death_df["Timeline"], 
                        y=death_df["Covid-19 impact"], 
-                       name = 'Deaths'))
+                       name = 'Deaths',
+                       line=dict(
+                                  color='red')))
 
         fig.add_trace(
             go.Scatter(x=recovered_df["Timeline"], 
                        y=recovered_df["Covid-19 impact"], 
-                       name = 'Recovery'))
+                       name = 'Recovery',
+                       line=dict(
+                                  color='yellow')))
 
         fig.update_xaxes(title_text="Time")
         fig.update_yaxes(title_text="Amount Of People")
