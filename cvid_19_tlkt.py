@@ -16,7 +16,7 @@ sns.set()
 
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import date, timedelta, datetime
 pd.options.plotting.backend
 
 '''
@@ -216,10 +216,43 @@ timeline = ['1/22/20', '1/23/20',
        '3/13/20', '3/14/20', '3/15/20', '3/16/20', '3/17/20',
        '3/18/20', '3/19/20', '3/20/20'] 
 
+def update_timeline(timeline, dataset_date):
+    date_format = "%m/%d/%y"
+    sdate = datetime.strptime('3/21/20', date_format)   # start date
+    edate = datetime.strptime(dataset_date, date_format)   # end date
+
+    delta = edate - sdate       # as timedelta
+    # make a list of dates from timedelta
+    d = []
+    for i in range(delta.days + 1):
+        day = sdate + timedelta(days=i)
+        d.append(day)
+    # make a list of convereted datetime objects to str obj dates
+    # and extend timeline list
+    string_list = []
+    for i in d:
+        string_date = datetime.strftime(i, "%m/%d/%y" )
+        string_list.append(string_date[1:])
+    timeline.extend(string_list)
+    del timeline[-1]
+    return timeline
+
 
 '''
 Explain what this class does
 '''        
+
+
+def generate_dataframe(self, data):
+    # generate confirmed dataframe
+    time = [];value = []#;confirmed_country=[];confirmed_province= []
+    # c_col_value = list(self.confirmed_data.columns)
+    for i in self.timeline:
+        time.append(datetime.strptime(i, '%m/%d/%y'))
+        value.append(data[i].sum())
+    df = pd.DataFrame({'Timeline':time,'Covid-19 impact':value})
+    return df
+
 
 
 class Covid_Timeline_data():
@@ -251,31 +284,16 @@ class Covid_Timeline_data():
         fig.show()
 
 
-    def analyze_covid_timelines(self, confirmed='on', death='on', recovered='on'):
+    def analyze_covid_timelines(self):
 
        # generate confirmed dataframe
-        confirmed_time = [];confirmed_value = []#;confirmed_country=[];confirmed_province= []
-       # c_col_value = list(self.confirmed_data.columns)
-        for i in self.timeline:
-            confirmed_time.append(datetime.strptime(i, '%m/%d/%y'))
-            confirmed_value.append(self.confirmed_data[i].sum())
-        confirmed_df = pd.DataFrame({'Timeline':confirmed_time,'Covid-19 impact':confirmed_value})
+        confirmed_df = generate_dataframe(self,self.confirmed_data)
 
         # generate death dataframe
-        death_time = [];death_value = []#;death_country=[];death_province= []
-        #d_col_value = list(self.death_data.columns)
-        for i in self.timeline:
-            death_time.append(datetime.strptime(i, '%m/%d/%y'))
-            death_value.append(self.death_data[i].sum())
-        death_df = pd.DataFrame({'Timeline':death_time,'Covid-19 impact':death_value})
+        death_df = generate_dataframe(self,self.death_data)
 
         # generate recovered dataframe
-        recovered_time = [];recovered_value = []#;recovered_ountry=[];recovered_province= []
-        #r_col_value = list(self.recovered_data.columns)
-        for i in self.timeline:
-            recovered_time.append(datetime.strptime(i, '%m/%d/%y'))
-            recovered_value.append(self.recovered_data[i].sum())
-        recovered_df = pd.DataFrame({'Timeline':recovered_time,'Covid-19 impact':recovered_value})
+        recovered_df = generate_dataframe(self,self.recovered_data)
 
         # generate time series plot
         fig = make_subplots()
