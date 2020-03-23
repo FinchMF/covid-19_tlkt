@@ -5,7 +5,7 @@ Work In Progress:
 Toolkit to:
 
     -track the spread of COVID-19
-    -predict the amount of cases
+    -predict the amount of cases in correlation to test given
     -assess the sentiment of social media in relation to the rate of COVID-19'spread
 
 Stretch Goal: 
