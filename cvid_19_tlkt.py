@@ -205,7 +205,7 @@ def update_timeline(timeline, dataset_date):
     for i in range(delta.days + 1):
         day = sdate + timedelta(days=i)
         d.append(day)
-    # make a list of convereted datetime objects to str obj dates
+    # make a list of converted datetime objects to str obj dates
     # and extend timeline list
     string_list = []
     for i in d:
@@ -329,6 +329,7 @@ class Covid_Timeline_data():
 
 
 # a class to generate predict models to assist in forecasting covid
+# work in progress
 
 class Covid19_Predictor():
 
