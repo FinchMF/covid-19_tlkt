@@ -38,10 +38,11 @@ class Covid19_data():
         self.normalized_data_confirmed = [value/self.df['Confirmed'].mean() + 10 for value in  self.df['Confirmed']]
         self.normalized_data_death = [value/self.df['Confirmed'].mean()+3 if value != 0  else value for value  in self.df['Deaths']]
         self.normalized_data_recovered = [value/self.df['Confirmed'].mean() + 3 if value != 0  else value for value  in self.df['Recovered']]
-        self.hoverdata_confirmed = self.df['Country/Region'] + " - "+ ['Confirmed cases: ' + str(v) for v in self.df['Confirmed'].tolist()]
-        self.hoverdata_death = self.df['Country/Region'] + " - "+ ['Death: ' + str(v) for v in self.df['Deaths'].tolist()]
-        self.hoverdata_recovered = self.df['Country/Region'] + " - "+ ['Recovered: ' + str(v) for v in self.df['Recovered'].tolist()]
-
+        self.normalized_data_active = [value/self.df['Confirmed'].mean()+3 if value != 0 else value for value in self.df['Active']]
+        self.hoverdata_confirmed = self.df['Country_Region'] + " - "+ ['Confirmed cases: ' + str(v) for v in self.df['Confirmed'].tolist()]
+        self.hoverdata_death = self.df['Country_Region'] + " - "+ ['Death: ' + str(v) for v in self.df['Deaths'].tolist()]
+        self.hoverdata_recovered = self.df['Country_Region'] + " - "+ ['Recovered: ' + str(v) for v in self.df['Recovered'].tolist()]
+        self.hoverdata_active = self.df['Country_Region'] + " - " + ['Active: ' + str(v) for v in self.df['Active'].tolist()]
 
     def analyze_covid_global(self):
 
@@ -53,8 +54,112 @@ class Covid19_data():
         
         fig = make_subplots()
         fig1 = go.Figure(data=go.Scattergeo(
-                lon = self.df['Longitude'],
-                lat = self.df['Latitude'],
+                lon = self.df['Long_'],
+                lat = self.df['Lat'],
+            name = 'Confirmed cases',
+                hovertext = self.hoverdata_confirmed,
+                marker = dict(
+                    size =  [x / 4 for x in self.normalized_data_confirmed],
+                    opacity = 0.5,
+                    color = 'purple',
+                    line = dict(
+                        width=0,
+                        color='rgba(102, 102, 102)'
+                    ),
+                ),
+                ))
+
+        fig2 = go.Figure(data=go.Scattergeo(
+                lon = self.df['Long_'],
+                lat = self.df['Lat'],
+            name = 'Deaths',
+                hovertext = self.hoverdata_death,
+                marker = dict(
+                    size =  [x / 2 for x in self.normalized_data_death],
+                    opacity = 0.7,
+                    color = 'red',
+                    line = dict(
+                        width=0,
+                        color='rgba(102, 102, 102)'
+                    ),
+                ),
+                ))
+
+
+        fig3= go.Figure(data=go.Scattergeo(
+                lon = self.df['Long_'],
+                lat = self.df['Lat'],
+                hovertext = self.hoverdata_recovered,
+            name = 'Recovered',
+                marker = dict(
+                    size =  [x / 4 for x in self.normalized_data_recovered],
+                    opacity = 0.5,
+                    color = 'yellow',
+                    line = dict(
+                        width=0,
+                        color='rgba(102, 102, 102)'
+                    ),
+                ),
+                ))
+
+        fig4= go.Figure(data=go.Scattergeo(
+                lon = self.df['Long_'],
+                lat = self.df['Lat'],
+                hovertext = self.hoverdata_active,
+            name = 'Active',
+                marker = dict(
+                    size =  [x / 4 for x in self.normalized_data_active],
+                    opacity = 0.5,
+                    color = 'green',
+                    line = dict(
+                        width=0,
+                        color='rgba(102, 102, 102)'
+                    ),
+                ),
+                ))
+
+        fig.add_trace(fig1.data[0])
+        fig.add_trace(fig2.data[0])
+        fig.add_trace(fig3.data[0])
+        fig.add_trace(fig4.data[0])
+
+
+        fig.update_geos(
+                resolution=110,
+                showcoastlines=True, coastlinecolor="RebeccaPurple",
+                showland=True, landcolor="LightGreen",
+                showocean=True, oceancolor="LightBlue",
+                showlakes=True, lakecolor="Blue",
+                showrivers=True, rivercolor="Blue"
+        )
+        fig.update_layout(
+                title = 'COVID-19 GLOBAL',
+                margin={"r":20,"t":20,"l":20,"b":20},
+            legend=dict(
+                itemsizing = "constant",
+                font=dict(
+                    family="Courier New, monospace",
+                    size=20,
+                    color="black"
+                )
+            )
+        )
+        fig.show()
+
+
+    def analyze_covid_by(self, region):
+
+
+        '''
+        Produce a global map that shows where COVID-19's geo location 
+
+        Within each position, there is number of: Confirmed Infections // Deaths // Recovery
+        '''
+        
+        fig = make_subplots()
+        fig1 = go.Figure(data=go.Scattergeo(
+                lon = self.df['Long_'],
+                lat = self.df['Lat'],
             name = 'Confirmed cases',
                 hovertext = self.hoverdata_confirmed,
                 marker = dict(
@@ -69,13 +174,13 @@ class Covid19_data():
                 ))
 
         fig2 = go.Figure(data=go.Scattergeo(
-                lon = self.df['Longitude'],
-                lat = self.df['Latitude'],
+                lon = self.df['Long_'],
+                lat = self.df['Lat'],
             name = 'Deaths',
                 hovertext = self.hoverdata_death,
                 marker = dict(
                     size =  self.normalized_data_death,
-                    opacity = 0.5,
+                    opacity = 0.7,
                     color = 'red',
                     line = dict(
                         width=0,
@@ -86,8 +191,8 @@ class Covid19_data():
 
 
         fig3= go.Figure(data=go.Scattergeo(
-                lon = self.df['Longitude'],
-                lat = self.df['Latitude'],
+                lon = self.df['Long_'],
+                lat = self.df['Lat'],
                 hovertext = self.hoverdata_recovered,
             name = 'Recovered',
                 marker = dict(
@@ -101,20 +206,45 @@ class Covid19_data():
                 ),
                 ))
 
+        fig4= go.Figure(data=go.Scattergeo(
+                lon = self.df['Long_'],
+                lat = self.df['Lat'],
+                hovertext = self.hoverdata_active,
+            name = 'Active',
+                marker = dict(
+                    size =  self.normalized_data_active,
+                    opacity = 0.5,
+                    color = 'green',
+                    line = dict(
+                        width=0,
+                        color='rgba(102, 102, 102)'
+                    ),
+                ),
+                ))
+
         fig.add_trace(fig1.data[0])
         fig.add_trace(fig2.data[0])
         fig.add_trace(fig3.data[0])
-
+        fig.add_trace(fig4.data[0])
+        
         fig.update_layout(
-                title = 'COVID-19 GLOBAL',
-            legend=dict(
-                itemsizing = "constant",
-                font=dict(
-                    family="Courier New, monospace",
-                    size=20,
-                    color="black"
-                )
-            )
+            geo = dict(
+                scope = region,
+                showland = True,
+                landcolor = "rgb(212, 212, 212)",
+                subunitcolor = "rgb(255, 255, 255)",
+                countrycolor = "rgb(255, 255, 255)",
+                showlakes = True,
+                lakecolor = "rgb(255, 255, 255)",
+                showsubunits = True,
+                showcountries = True,
+                resolution = 50,
+                projection = dict(
+                    type = 'orthographic',
+                    rotation_lon = -100
+                ),
+            ),
+            title='COVID-19 By Region',
         )
         fig.show()
 
@@ -129,30 +259,32 @@ class Covid19_data():
 
         fig = px.pie(self.df, 
                     values= category, 
-                    names='Country/Region',
+                    names='Country_Region',
                     title= category + ' Rates Across Countries',
-                    hover_data=['Province/State'], 
-                    labels={'Province/State':'Province/State'})
+                    hover_data=['Province_State'], 
+                    labels={'Province_State':'Province_State'})
         fig.update_traces(textposition='inside')
         fig.show()
         
-
-    def analyze_covid_treemap(self, category):
+    # this function is currently out of comission - there is an error in the new data structure from WHO
+    # def analyze_covid_treemap(self, category):
         
-        '''
-        Produce a treemap focused on distribution of given parameter
+    #     '''
+    #     Produce a treemap focused on distribution of given parameter
 
-        parameters are: Confirmed Infections // Deaths // Recovered
-        '''
+    #     parameters are: Confirmed Infections // Deaths // Recovered
+    #     '''
+        
+    #     self.df["world"] = "world" # root node
+    #     fig = px.treemap(self.df, 
+    #                             path=['world' , 'Country_Region', 'Province_State'], 
+    #                             color = category,
+    #                             color_continuous_scale=px.colors.sequential.Magenta,
+    #                             title = category, 
+    #                             values= category) 
+    #     fig.show()
 
-        self.df["world"] = "world" # root node
-        fig = px.treemap(self.df, 
-                                path=['world' , 'Country/Region', 'Province/State'], 
-                                color = category,
-                                color_continuous_scale=px.colors.sequential.Magenta,
-                                title = category, 
-                                values= category) 
-        fig.show()
+
 
 
     '''
@@ -160,14 +292,22 @@ class Covid19_data():
     '''
     def analyze_country(self, country):
 
-        country = self.df.loc[self.df['Country/Region'] == country]
+        df = self.df.drop(['FIPS', 'Admin2', 'Lat', 'Long_', 'Combined_Key', 'Last_Update'], axis=1)
+        country = df.loc[df['Country_Region'] == country]
         return country
     
     def analyze_state(self, state):
 
-        state = self.df.loc[self.df['Province/State'] == state]
+        df = self.df.drop(['FIPS', 'Lat', 'Long_', 'Combined_Key', 'Last_Update'], axis=1)
+        df.rename(columns = {'Admin2':'County'}, inplace = True) 
+        state = df.loc[df['Province_State'] == state]
         return state
 
+    def analyze_county(self, county):
+        df = self.df.drop(['FIPS', 'Lat', 'Long_', 'Combined_Key', 'Last_Update'], axis=1)
+        df.rename(columns = {'Admin2':'County'}, inplace = True) 
+        county = df.loc[df['County'] == county]
+        return county
 
 '''
 timeline variable is a list of dates used to generate labels and is

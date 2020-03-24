@@ -109,3 +109,48 @@ class Covid_Timeline_data():
         print('== Information to {} on novel COVID-19 =========\n'.format(self.confirmed_data[self.confirmed_data.columns[-1]].name))
         print('Tota confirmed: {}\nTotal Deaths: {}\nTotal Recovered: {}\n'.format(generate_value(self, self.confirmed_data), generate_value(self,self.death_data), generate_value(self,self.recovered_data)))
         print('==================================================================')
+
+
+
+
+
+def generate_graph(self, category)
+    self.df["world"] = "world" # root node
+                fig = px.treemap(self.df, 
+                                path=['world' , 'Country/Region', 'Province/State'], 
+                                color = Category ,
+                                color_continuous_scale=px.colors.sequential.Magenta,
+                                title = Category + ' Infection rates', 
+                                values=Category)
+
+ def analyze_covid_treemap(self, category):
+
+        if category == 'Confirmed':
+            self.df["world"] = "world" # root node
+            fig = px.treemap(self.df, 
+                            path=['world' , 'Country/Region', 'Province/State'], 
+                            color ='Confirmed' ,
+                            color_continuous_scale=px.colors.sequential.Magenta,
+                            title = 'Confirmed Infection rates', 
+                            values='Confirmed')
+            fig.show()
+
+        if category == 'Deaths':
+            self.df["world"] = "world" # root node
+            fig = px.treemap(self.df, 
+                            path=['world' , 'Country/Region', 'Province/State'], 
+                            color ='Deaths' ,
+                            color_continuous_scale=px.colors.sequential.Magenta,
+                            title = 'Death rates', 
+                            values='Deaths')
+            fig.show()
+
+        if category == 'Recovered':
+            self.df["world"] = "world" # root node
+            fig = px.treemap(self.df, 
+                            path=['world' , 'Country/Region', 'Province/State'], 
+                            color ='Recovered' ,
+                            color_continuous_scale=px.colors.sequential.Magenta,
+                            title = 'Recovery rates', 
+                            values='Recovered')
+            fig.show()
