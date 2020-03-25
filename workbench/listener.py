@@ -8,6 +8,9 @@ import numpy as np
 import pandas as pd 
 import matplotlib.pyplot as plt
 
+import json
+from datetime import datetime, date, timedelta
+
 
 import config
 
@@ -33,12 +36,44 @@ class Twitter_cli():
 
     def get_twitter_client_api(self):
         return self.client
+
+    def search_twitter(self, search_query, from_date, num_tw, only_text=False, geocode=None):
+        search_words = search_query
+        date_since = from_date
+
+        tweets = Cursor(self.client.search,
+                  q=search_words,
+                  lang="en",
+                  since=date_since[0],
+                  until=date_since[1],
+                  geocode=geocode).items(num_tw)
+       
+        list_of_tweets = []
+        if only_text:
+            for tweet in tweets:
+                list_of_tweets.append(tweet.text)
+        else:
+            filtered_tweets = [[tweet.id_str, tweet.created_at, tweet.text, tweet.retweet_count] for tweet in tweets]
+            for t in filtered_tweets:
+                keys = ['tweet_id', 'time', 'text', 'retweet']
+                twitter_dict = dict(zip(keys, t))
+                list_of_tweets.append(twitter_dict)
+        
+            for tweet in list_of_tweets:
+                for k,v in tweet.items():
+                    if k == 'time':
+                        v = v.strftime("%m/%d/%Y, %H:%M:%S")
+                        tweet['time'] = v
+            
+        return list_of_tweets
     
     def get_user_timeline_tweets(self, num_tw):
         tweets = []
         for tw in Cursor(self.client.user_timeline, id=self.twitter_user).items(num_tw):
             tweets.append(tw)
         return tweets
+
+
 
 #-------# S T R E A M  T W E E T S #-------#
 
@@ -92,7 +127,17 @@ class Analyzer():
 
         return df
 
+#-------# S A V E and L O A D  T W E E T S #-------#
 
+def save_tweets(list_of_tweets, filename)
+filename = filename + '.json'
+    with open(filename, 'w') as f_out:
+        json.dump(list_of_tweets, f_out)
+
+def load_tweets(filename):
+    with open(filename, 'r') as f_in:
+        json_file = json.load(f_in)
+    return json_file
 
 if __name__ == '__main__':
     
