@@ -382,10 +382,10 @@ class Covid_Timeline_data():
     over all trends of Covid's spread between countries and over time
     '''
 
-    def __init__(self, updated_confirmed_timeline, updated_death_timeline, updated_recovered_timeline, timeline):
+    def __init__(self, updated_confirmed_timeline, updated_death_timeline, timeline):
         self.confirmed_data = pd.read_csv(updated_confirmed_timeline)
         self.death_data = pd.read_csv(updated_death_timeline)
-        self.recovered_data = pd.read_csv(updated_recovered_timeline)
+        # self.recovered_data = pd.read_csv(updated_recovered_timeline)
         self.timeline = timeline
 
     def analyze_covid_spread(self):
@@ -419,7 +419,7 @@ class Covid_Timeline_data():
         death_df = generate_dataframe(self,self.death_data)
 
         # generate recovered dataframe
-        recovered_df = generate_dataframe(self,self.recovered_data)
+        # recovered_df = generate_dataframe(self,self.recovered_data)
 
         # generate time series plot
         fig = make_subplots()
@@ -438,12 +438,12 @@ class Covid_Timeline_data():
                        line=dict(
                                   color='red')))
 
-        fig.add_trace(
-            go.Scatter(x=recovered_df["Timeline"], 
-                       y=recovered_df["Covid-19 impact"], 
-                       name = 'Recovery',
-                       line=dict(
-                                  color='yellow')))
+        # fig.add_trace(
+        #     go.Scatter(x=recovered_df["Timeline"], 
+        #                y=recovered_df["Covid-19 impact"], 
+        #                name = 'Recovery',
+        #                line=dict(
+        #                           color='yellow')))
 
         fig.update_xaxes(title_text="Time")
         fig.update_yaxes(title_text="Amount Of People")
@@ -464,7 +464,7 @@ class Covid_Timeline_data():
         fig.show()
         print('================ Totals Report =====================================')
         print('== Information to {} on novel COVID-19 =========\n'.format(self.confirmed_data[self.confirmed_data.columns[-1]].name))
-        print('Tota confirmed: {}\nTotal Deaths: {}\nTotal Recovered: {}\n'.format(generate_value(self, self.confirmed_data), generate_value(self,self.death_data), generate_value(self,self.recovered_data)))
+        print('Tota confirmed: {}\nTotal Deaths: {}\n'.format(generate_value(self, self.confirmed_data), generate_value(self,self.death_data)))
         print('==================================================================')
 
 

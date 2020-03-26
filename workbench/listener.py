@@ -14,6 +14,56 @@ from datetime import datetime, date, timedelta
 
 import config
 
+###########################################
+# C I T Y  G E O C O D E  L O C A T I O N #
+###########################################
+
+# New York City, New York
+# manhattan = '40.758896,-73.985130,4mi'
+# brooklyn = '40.650002,-73.949997,4mi' 
+# Michigan
+# detroit = '42.331429,-83.045753,4mi'
+# wayne = '42.280984,-83.281255,4mi'
+# Illinois
+# chicago = '41.881832,-87.623177,4mi'
+# Washington_dc
+# washington_ndc = '38.8951,-77.0364,4mi'
+# Florida
+# miami = '25.761681,-80.191788,4mi'
+# California
+# los_angeles = '34.308284,-118.228241,4mi'
+# Wasington
+# seatte = '47.608013,-122.335167,4mi'
+
+cities = {'manhattan':'40.758896,-73.985130,4mi',
+          'brooklyn': '40.650002,-73.949997,4mi',
+          'detroit': '42.331429,-83.045753,4mi',
+          'wayne': '42.280984,-83.281255,4mi',
+          'chicago': '41.881832,-87.623177,4mi',
+          'cook': '41.841448,-87.816588,4mi',
+          'washington_dc': '38.8951,-77.0364,4mi',
+          'miami': '25.761681,-80.191788,4mi',
+          'los_angeles': '34.308284,-118.228241,4mi',
+          'seattle': '47.608013,-122.335167,4mi',
+          'king': '47.491379,-121.834613,4mi',
+          'pima':'32.097133,-111.789003,4mi'
+ }
+
+word_list = ['covid-19',
+              'coronavirus',
+              'quarantine',
+              'virus',
+              'chinese virus',
+              'heatlh',
+              'toilet paper',
+              'shortage',
+              'death',
+              'infected',
+              'confirmed',
+              'ventilator',
+              'face mask',
+              'hospital'
+ ]
 
 #-------# A U T H E N T I C A T I O N #-------#
 
