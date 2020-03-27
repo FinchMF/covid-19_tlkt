@@ -438,12 +438,12 @@ class Covid_Timeline_data():
                        line=dict(
                                   color='red')))
 
-        # fig.add_trace(
-        #     go.Scatter(x=recovered_df["Timeline"], 
-        #                y=recovered_df["Covid-19 impact"], 
-        #                name = 'Recovery',
-        #                line=dict(
-        #                           color='yellow')))
+        fig.add_trace(
+            go.Scatter(x=recovered_df["Timeline"], 
+                       y=recovered_df["Covid-19 impact"], 
+                       name = 'Recovery',
+                       line=dict(
+                                  color='yellow')))
 
         fig.update_xaxes(title_text="Time")
         fig.update_yaxes(title_text="Amount Of People")
