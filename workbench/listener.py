@@ -6,6 +6,7 @@ from tweepy import Stream
 
 import numpy as np 
 import pandas as pd 
+import time
 import matplotlib.pyplot as plt
 
 import json
@@ -52,18 +53,10 @@ cities = {'manhattan':'40.758896,-73.985130,4mi',
 word_list = ['covid-19',
               'coronavirus',
               'quarantine',
-              'virus',
-              'chinese virus',
-              'heatlh',
-              'toilet paper',
-              'shortage',
-              'death',
-              'infected',
-              'confirmed',
-              'ventilator',
-              'face mask',
-              'hospital'
+              'virus'
  ]
+
+date=['2020-03-19', '2020-03-20']
 
 #-------# A U T H E N T I C A T I O N #-------#
 
@@ -179,8 +172,8 @@ class Analyzer():
 
 #-------# S A V E and L O A D  T W E E T S #-------#
 
-def save_tweets(list_of_tweets, filename)
-filename = filename + '.json'
+def save_tweets(list_of_tweets, filename):
+    filename = filename + '.json'
     with open(filename, 'w') as f_out:
         json.dump(list_of_tweets, f_out)
 
@@ -189,27 +182,57 @@ def load_tweets(filename):
         json_file = json.load(f_in)
     return json_file
 
+#-------# C O L L E C T  T W E E T S  I N  D I C T #-------#
+
+twitter_cli = Twitter_cli()
+
+def get_tweets(city_name, city):
+    list_of_twt_dict = []
+    for word in word_list:
+        twt_dict =  twitter_cli.search_twitter(word, date, 200, False, city)
+        list_of_twt_dict.append(twt_dict)
+    #    time.sleep(20)
+    word_city_dict = dict(zip(word_list, list_of_twt_dict))
+    city_name = city_name + date[0]
+    save_tweets(word_city_dict, city_name)
+
 if __name__ == '__main__':
-    
     twitter_cli = Twitter_cli()
-    twitter_analyzer = Analyzer()
+    
+    # def get_tweets(city_name, city):
+    #     list_of_twt_dict = []
+    #     for word in word_list:
+    #        twt_dict =  twitter_cli.search_twitter(word, date, 200, False, city)
+    #        list_of_twt_dict.append(twt_dict)
+    #     #    time.sleep(20)
+    #     word_city_dict = dict(zip(word_list, list_of_twt_dict))
+    #     city_name = city_name + date[0]
+    #     save_tweets(word_city_dict, city_name)
 
-    api = twitter_cli.get_twitter_client_api()
+    # for k,v in cities.items():
+    #     get_tweets(k,v)
 
-    tweets = api.user_timeline(screen_name='realDonaldTrump', count=200)
 
-    df = twitter_analyzer.tweets_to_df(tweets)
 
-    print(np.mean(df['len']))
-    print(np.max(df['likes']))
-    print(np.max(df['retweets']))
 
-    print(df.head(10))
+    # twitter_analyzer = Analyzer()
 
-    time_likes = pd.Series(data=df['likes'].values, index=df['date'])
-    time_likes.plot(figsize=(16,4), label='likes', legend=True)
+    # api = twitter_cli.get_twitter_client_api()
 
-    time_retweets = pd.Series(data=df['retweets'].values, index=df['date'])
-    time_retweets.plot(figsize=(16,4), label='retweets', legend=True)
+    # tweets = api.user_timeline(screen_name='realDonaldTrump', count=200)
 
-    plt.show()
+    # df = twitter_analyzer.tweets_to_df(tweets)
+
+    # print(np.mean(df['len']))
+    # print(np.max(df['likes']))
+    # print(np.max(df['retweets']))
+
+    # print(df.head(10))
+
+    # time_likes = pd.Series(data=df['likes'].values, index=df['date'])
+    # time_likes.plot(figsize=(16,4), label='likes', legend=True)
+
+    # time_retweets = pd.Series(data=df['retweets'].values, index=df['date'])
+    # time_retweets.plot(figsize=(16,4), label='retweets', legend=True)
+
+    # plt.show()
