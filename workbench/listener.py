@@ -44,19 +44,20 @@ cities = {'manhattan':'40.758896,-73.985130,4mi',
           'cook': '41.841448,-87.816588,4mi',
           'washington_dc': '38.8951,-77.0364,4mi',
           'miami': '25.761681,-80.191788,4mi',
-          'los_angeles': '34.308284,-118.228241,4mi',
+          'los_angeles': '34.052235,-118.243683,4mi',
           'seattle': '47.608013,-122.335167,4mi',
           'king': '47.491379,-121.834613,4mi',
-          'pima':'32.097133,-111.789003,4mi'
+          'las_vegas':'36.114647,-115.172813,4mi'
  }
 
 word_list = ['covid-19',
               'coronavirus',
               'quarantine',
-              'virus'
+              'virus',
+              'Fauci'
  ]
 
-date=['2020-03-19', '2020-03-20']
+date=['2020-03-20', '2020-03-21']
 
 #-------# A U T H E N T I C A T I O N #-------#
 
@@ -197,7 +198,8 @@ def get_tweets(city_name, city):
     save_tweets(word_city_dict, city_name)
 
 if __name__ == '__main__':
-    twitter_cli = Twitter_cli()
+    pass
+    # twitter_cli = Twitter_cli()
     
     # def get_tweets(city_name, city):
     #     list_of_twt_dict = []
