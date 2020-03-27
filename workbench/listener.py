@@ -3,6 +3,7 @@ from tweepy import Cursor
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+from tweepy import TweepError
 
 import numpy as np 
 import pandas as pd 
@@ -54,10 +55,11 @@ word_list = ['covid-19',
               'coronavirus',
               'quarantine',
               'virus',
-              'Fauci'
+              'Fauci',
+              'Donald Trump'
  ]
 
-date=['2020-03-20', '2020-03-21']
+date=['2020-03-27', '2020-03-28']
 
 #-------# A U T H E N T I C A T I O N #-------#
 
@@ -192,27 +194,33 @@ def get_tweets(city_name, city):
     for word in word_list:
         twt_dict =  twitter_cli.search_twitter(word, date, 200, False, city)
         list_of_twt_dict.append(twt_dict)
-    #    time.sleep(20)
     word_city_dict = dict(zip(word_list, list_of_twt_dict))
     city_name = city_name + date[0]
     save_tweets(word_city_dict, city_name)
+    
 
 if __name__ == '__main__':
-    pass
-    # twitter_cli = Twitter_cli()
     
-    # def get_tweets(city_name, city):
-    #     list_of_twt_dict = []
-    #     for word in word_list:
-    #        twt_dict =  twitter_cli.search_twitter(word, date, 200, False, city)
-    #        list_of_twt_dict.append(twt_dict)
-    #     #    time.sleep(20)
-    #     word_city_dict = dict(zip(word_list, list_of_twt_dict))
-    #     city_name = city_name + date[0]
-    #     save_tweets(word_city_dict, city_name)
+    twitter_cli = Twitter_cli()
+    
+    for k,v in cities.items():
+        try:
+            get_tweets(k,v)
+            print('retrieved ' + k)
+        except TweepError:
+            print('did not retrieve ' + k)
+            print('waiting 15min....')
+            now = datetime.now()
+            print(now.hour, now.minute, now.second) 
+            time.sleep(900)
+            print('waking back up')
+            now = datetime.now()
+            print(now.hour, now.minute, now.second)
+            print('now retrieving')
+            get_tweets(k,v)
+            print('retrieved ' + k)
+            continue
 
-    # for k,v in cities.items():
-    #     get_tweets(k,v)
 
 
 
