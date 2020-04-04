@@ -74,7 +74,7 @@ def get_all_tweets(screen_name):
     outtweets = [[tweet.id_str, tweet.created_at, tweet.text, tweet.retweet_count] for tweet in alltweets]
 
     #write the csv	
-    with open('confirmed_figure_tweets/%s_tweets.csv' % screen_name, 'w') as f:
+    with open('figure_tweets/%s_tweets.csv' % screen_name, 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["id","created_at","text","retweet_count"])
         writer.writerows(outtweets)
@@ -84,13 +84,7 @@ def get_all_tweets(screen_name):
 
 if __name__ == '__main__':
 	#pass in the username of the account you want to download
-    handle_list = ['freep',
-                   'chicagotribune',
-                   'WashTimes',
-                   'MiamiNewTimes',
-                   'latimes',
-                   'seattletimes',
-                   'reviewjournal' 
+    handle_list = ['Acosta'
                    ]	
         
     for handle in handle_list:
