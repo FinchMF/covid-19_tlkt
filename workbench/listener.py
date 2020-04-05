@@ -43,7 +43,7 @@ word_list = ['covid-19',
               'Donald Trump'
  ]
 
-date=['2020-04-03', '2020-04-04']
+date=['2020-04-04', '2020-04-05']
 
 #-------# A U T H E N T I C A T I O N #-------#
 
