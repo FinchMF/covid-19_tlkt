@@ -74,7 +74,7 @@ def get_all_tweets(screen_name):
     outtweets = [[tweet.id_str, tweet.created_at, tweet.text, tweet.retweet_count] for tweet in alltweets]
 
     #write the csv	
-    with open('figure_tweets/%s_tweets.csv' % screen_name, 'w') as f:
+    with open('confirmed_figure_tweets/%s_tweets.csv' % screen_name, 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["id","created_at","text","retweet_count"])
         writer.writerows(outtweets)
@@ -84,13 +84,58 @@ def get_all_tweets(screen_name):
 
 if __name__ == '__main__':
 	#pass in the username of the account you want to download
-    handle_list = ['DanCrenshawTX'
+    figure_list = ['AOC',
+                   'Acosta',
+                   'BarackObama',
+                   'BernieSanders',
+                   'HillaryClinton',
+                   'JoeBiden',
+                   'Mike_Pence',
+                   'NYGovCuomo',
+                   'SpeakerPelosi',
+                   'Trevornoah',
+                   'TuckerCarlson',
+                   'VP',
+                   'andersoncooper',
+                   'iamjohnoliver',
+                   'jaketapper',
+                   'marcmaron',
+                   'realDonaldTrump',
+                   'scrowder',
+                   'seanhannity'
                    ]	
+
+    confirmed_figure_list = ['BenMcAdams',
+                             'BorisJohnson',
+                             'ChrisCuomo',
+                             'CuomoPrimeTime',
+                             'FrancisSuarez',
+                             'JoeCunninghamSC',
+                             'MarioDB',
+                             'MelindaKatz',
+                             'MiamiMayor',
+                             'MiamiNewTimes',
+                             'MikeKellyPA',
+                             'NadineDorries',
+                             'NydiaVelazquez',
+                             'RandPaul',
+                             'RepBenMcAdams',
+                             'RepCunningham',
+                             'SenGianaris',
+                             'WashTimes',
+                             'chicagotribune',
+                             'freep',
+                             'latimes',
+                             'nytimes',
+                             'reviewjournal',
+                             'seattletimes'
+    ]
         
-    for handle in handle_list:
+    for handle in confirmed_figure_list:
             get_all_tweets(handle)
        
-
+    for handle in figure_list:
+        get_all_tweets(handle)
 
 
 
