@@ -43,7 +43,7 @@ word_list = ['covid-19',
               'Donald Trump'
  ]
 
-date=['2020-04-17', '2020-04-18']
+date=['2020-04-25', '2020-04-26']
 
 #-------# A U T H E N T I C A T I O N #-------#
 
@@ -73,6 +73,7 @@ class Twitter_cli():
 
         tweets = Cursor(self.client.search,
                   q=search_words,
+                  tweet_mode='extended',
                   lang="en",
                   since=date_since[0],
                   until=date_since[1],
@@ -83,7 +84,7 @@ class Twitter_cli():
             for tweet in tweets:
                 list_of_tweets.append(tweet.text)
         else:
-            filtered_tweets = [[tweet.id_str, tweet.created_at, tweet.text, tweet.retweet_count] for tweet in tweets]
+            filtered_tweets = [[tweet.id_str, tweet.created_at, tweet.full_text, tweet.retweet_count] for tweet in tweets]
             for t in filtered_tweets:
                 keys = ['tweet_id', 'time', 'text', 'retweet']
                 twitter_dict = dict(zip(keys, t))

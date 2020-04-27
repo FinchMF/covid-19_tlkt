@@ -26,7 +26,8 @@ def get_all_tweets(screen_name):
 	#make initial request for most recent tweets (200 is the maximum allowed count)
     try:
         new_tweets = api.user_timeline(screen_name=screen_name,
-                                       count=200)
+                                       count=200, 
+                                       tweet_mode='extended')
 
     except TweepError:
         print('limit error on ' + screen_name + 'during intital request')
@@ -34,7 +35,9 @@ def get_all_tweets(screen_name):
         time.sleep(900)
         print('waking back up...')
         print('now retrieving tweets from ' + screen_name)
-        new_tweets = api.user_timeline(screen_name = screen_name,count=200)
+        new_tweets = api.user_timeline(screen_name = screen_name,
+                                       count=200, 
+                                       tweet_mode='extended')
         print('retrieved new_tweets list from ' + screen_name)
         
 
@@ -51,14 +54,18 @@ def get_all_tweets(screen_name):
         
         #all subsiquent requests use the max_id param to prevent duplicates
         try:
-            new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest)
+            new_tweets = api.user_timeline(screen_name = screen_name,
+                                           count=200,max_id=oldest, 
+                                           tweet_mode='extended')
         except TweepError:
             print('limit error on ' + screen_name + ' during oldest')
             print('waiting 15min...')
             time.sleep(900)
             print('waking back up...')
             print('now retrieving more tweets from ' + screen_name)
-            new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest)
+            new_tweets = api.user_timeline(screen_name = screen_name,
+                                           count=200,max_id=oldest, 
+                                           tweet_mode='extended')
             continue
         
         
@@ -71,10 +78,10 @@ def get_all_tweets(screen_name):
         print("...%s tweets downloaded so far" % (len(alltweets)))
 
     
-    outtweets = [[tweet.id_str, tweet.created_at, tweet.text, tweet.retweet_count] for tweet in alltweets]
+    outtweets = [[tweet.id_str, tweet.created_at, tweet.full_text, tweet.retweet_count] for tweet in alltweets]
 
     #write the csv	
-    with open('confirmed_figure_tweets/%s_tweets.csv' % screen_name, 'w') as f:
+    with open('figure_tweets/%s_tweets.csv' % screen_name, 'w') as f:
         writer = csv.writer(f)
         writer.writerow(["id","created_at","text","retweet_count"])
         writer.writerows(outtweets)
@@ -131,11 +138,77 @@ if __name__ == '__main__':
                              'seattletimes'
     ]
         
-    for handle in confirmed_figure_list:
-            get_all_tweets(handle)
+    project_accounts = ['realDonaldTrump',
+                        'Mike_Pence',
+                        'VP',
+                        'seanhannity',
+                        'BarackObama',
+                        'BernieSanders',
+                        'HillaryClinton',
+                        'JoeBiden'
+                        ]
+    # as ranked by brandwatch 2019 50 - 1
+    most_influential_accounts = ['TheRock',
+                                 'nickjonas',
+                                 'Beyonce',
+                                 'DaniloGentili',
+                                 'LeoDiCaprio',
+                                 'NICKIMINAJ',
+                                 'MariahCarey',
+                                 'AvrilLavigne',
+                                 'ConanOBrien',
+                                 'sachin_rt',
+                                 'chrisbrown',
+                                 'LiamPayne',
+                                 'Louis_Tomlinson',
+                                 'LilTunechi',
+                                 'KevinHart4real',
+                                 'Oprah',
+                                 'BrunoMars',
+                                 'britneyspears',
+                                 'seanhannity',
+                                 'MacMiller',
+                                 'maddow',
+                                 'rickygervais',
+                                 'HillaryClinton',
+                                 'zaynmalik',
+                                 'kanyewest',
+                                 'Harry_Styles',
+                                 'NiallOfficial',
+                                 'KingJames',
+                                 'MileyCyrus',
+                                 'jimmyfallon',
+                                 'shakira',
+                                 'selenagomez',
+                                 'jtimberlake',
+                                 'rihanna',
+                                 'justinbieber',
+                                 'BarackObama',
+                                 'JLo',
+                                 'BillGates',
+                                 'KimKardashian',
+                                 'ArianaGrande',
+                                 'TheEllenShow',
+                                 'ladygaga',
+                                 'Cristiano',
+                                 'elonmusk',
+                                 'katyperry',
+                                 'narendramodi',
+                                 'realdonaldtrump',
+                                 'taylorswift13']
+    # for handle in confirmed_figure_list:
+    #         get_all_tweets(handle)
        
     for handle in figure_list:
         get_all_tweets(handle)
+
+    # for handle in project_accounts:
+    #     get_all_tweets(handle)
+
+    # for handle in most_influential_accounts:
+    #     get_all_tweets(handle)
+
+    # get_all_tweets('realDonaldTrump')
 
 
 
